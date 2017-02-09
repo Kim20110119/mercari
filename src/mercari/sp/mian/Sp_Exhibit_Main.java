@@ -11,6 +11,7 @@ package mercari.sp.mian;
 public class Sp_Exhibit_Main {
 	public static void main(String[] args) {
 		// TODO 携帯版出品処理
+		System.out.println("成功！！！");
 	}
 
 }
