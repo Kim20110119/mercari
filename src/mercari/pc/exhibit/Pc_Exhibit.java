@@ -29,8 +29,8 @@ public class Pc_Exhibit extends Pc_Mercari {
 	//==================================================================================================================
 	// 商品項目
 	//==================================================================================================================
-	/** 商品画像 */
-	String images;
+	/** 商品画像パス */
+	String images_path;
 	/** 商品名 */
 	String name;
 	/** 商品の説明 */
@@ -173,7 +173,7 @@ public class Pc_Exhibit extends Pc_Mercari {
 	 */
 	public void setData(ProductBean bean) {
 		// 商品画像
-		this.images = bean.getImages();
+		this.images_path = bean.getImages_path();
 		// 商品名
 		this.name = bean.getName();
 		// 商品の説明
