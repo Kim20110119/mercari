@@ -1,4 +1,4 @@
-package mercari.pc.comment;
+package mercari.pc.awaiting;
 
 import static common.constant.MercariConstants.*;
 
@@ -10,20 +10,16 @@ import mercari.pc.Pc_Mercari;
 
 /**
  * =====================================================================================================================
- * コメントある商品の抽出（PC版メルカリ）
+ * 評価待ち商品の抽出（PC版メルカリ）
  * =====================================================================================================================
  *
  * @author kimC
  *
  */
-public class Pc_Comment extends Pc_Mercari {
+public class Pc_Awaiting extends Pc_Mercari {
 	//==================================================================================================================
 	// 定数
 	//==================================================================================================================
-	/** サイズデフォルト */
-	public final static String DEFAULT_SIZE = "FREE SIZE";
-	/** 配送の方法デフォルト */
-	public static final String DEFAULT_DELIVERY = "未定";
 
 	//==================================================================================================================
 	// メルカリアカウント
@@ -50,7 +46,7 @@ public class Pc_Comment extends Pc_Mercari {
 	 * @author kimC
 	 *
 	 */
-	public Pc_Comment(String id, String pass) {
+	public Pc_Awaiting(String id, String pass) {
 		// ユーザーID
 		this.userId = id;
 		// ユーザーパスワード
@@ -60,30 +56,30 @@ public class Pc_Comment extends Pc_Mercari {
 
 	/**
 	 * =================================================================================================================
-	 * コメントある商品の抽出処理
+	 * 評価待ち商品の抽出処理
 	 * =================================================================================================================
 	 *
-	 * @return Boolean コメントある商品の抽出結果
+	 * @return Boolean 評価待ち商品の抽出結果
 	 *
 	 * @author kimC
 	 *
 	 */
 	public Boolean execute() {
 		try {
-			// 【出品した商品 - 出品中】画面
-			driver.get(PC_LISTING_URL);
+			// 【出品した商品 - 取引中】画面
+			driver.get(PC_IN_PROGRESS_URL);
 
 			for(int i = 0;i < 10000;i++){
-				// 【出品した商品 - 出品中】画面メッセージ
-				message = driver.findElement(By.id("mypage-tab-transaction-now")).getText();
-				if(message.matches(STR_LISTING)){
+				// 【出品した商品 - 取引中】画面メッセージ
+				message = driver.findElement(By.id("mypage-tab-transaction-old")).getText();
+				if(message.matches(STR_IN_PROGRESS)){
 					break;
 				}else{
 					// 商品一覧数を取得する
-					int p_count = driver.findElement(By.id("mypage-tab-transaction-now")).findElements(By.tagName("li")).size();
+					int p_count = driver.findElement(By.id("mypage-tab-transaction-old")).findElements(By.tagName("li")).size();
 					// コメントある商品を検索し、新しいタブで商品詳細画面を開く
 					for(int j = 0; j < p_count; j++){
-						if(this.getCommentCount(j) > 0){
+						if(this.getStatus(j).equals(STR_WAIT_1)){
 							this.openTab(this.getDetailUrl(j));
 						}
 					}
@@ -112,7 +108,7 @@ public class Pc_Comment extends Pc_Mercari {
 	public String getDetailUrl(int i) {
 		String url = StringUtils.EMPTY;
 		try{
-			url = driver.findElement(By.id("mypage-tab-transaction-now")).findElements(By.tagName("li")).get(i).findElement(By.tagName("a")).getAttribute("href");
+			url = driver.findElement(By.id("mypage-tab-transaction-old")).findElements(By.tagName("li")).get(i).findElement(By.tagName("a")).getAttribute("href");
 		}catch(Exception e){
 		}
 		return url;
@@ -120,25 +116,22 @@ public class Pc_Comment extends Pc_Mercari {
 
 	/**
 	 * =================================================================================================================
-	 * 「コメントカウント数」を取得する
+	 * 取引中商品のスタータスを取得する
 	 * =================================================================================================================
 	 *
 	 * @param int i インデクス
+	 * @return String status 取引中商品のスタータス
 	 *
 	 * @author kimC
 	 *
 	 */
-	public Integer getCommentCount(int i) {
+	public String getStatus(int i) {
+		String status = StringUtils.EMPTY;
 		try{
-			String str_c_count = StringUtils.EMPTY;
-			str_c_count = driver.findElement(By.id("mypage-tab-transaction-now")).findElements(By.tagName("li")).get(i).findElements(By.className("listing-item-count")).get(INT_1).getText();
-			if(StringUtils.isNotEmpty(str_c_count)){
-				return Integer.parseInt(str_c_count);
-			}
+			status = driver.findElement(By.id("mypage-tab-transaction-old")).findElements(By.tagName("li")).get(i).findElement(By.className("mypage-item-status")).getText();
 		}catch(Exception e){
 		}
-		return 0;
-
+		return status;
 	}
 
 	/**
