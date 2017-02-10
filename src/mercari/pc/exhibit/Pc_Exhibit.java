@@ -2,6 +2,8 @@ package mercari.pc.exhibit;
 
 import static common.constant.MercariConstants.*;
 
+import java.io.File;
+
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
@@ -25,6 +27,14 @@ public class Pc_Exhibit extends Pc_Mercari {
 	public final static String DEFAULT_SIZE = "FREE SIZE";
 	/** 配送の方法デフォルト */
 	public static final String DEFAULT_DELIVERY = "未定";
+
+	//==================================================================================================================
+	// メルカリアカウント
+	//==================================================================================================================
+	/** メルカリユーザーID */
+	String userId;
+	/** メルカリユーザーパスワード */
+	String userPass;
 
 	//==================================================================================================================
 	// 商品項目
@@ -62,9 +72,11 @@ public class Pc_Exhibit extends Pc_Mercari {
 	 * コンストラクタ
 	 */
 	public Pc_Exhibit(String id, String pass) {
-		super.login(id, pass);
-		// PC版出品画面
-		driver.get(PC_EXHIBIT_URL);
+		// ユーザーID
+		this.userId = id;
+		// ユーザーパスワード
+		this.userPass = pass;
+		super.login(this.userId, this.userPass);
 	}
 
 	/**
@@ -79,7 +91,12 @@ public class Pc_Exhibit extends Pc_Mercari {
 	 */
 	public Boolean execute(ProductBean bean) {
 		try {
+			// PC版出品画面
+			driver.get(PC_EXHIBIT_URL);
+			// EXCELから商品情報を抽出する
 			this.setData(bean);
+			// 出品画像
+			this.setImage();
 			// 商品名
 			this.sendKeysByInput(INT_0,this.name);
 			// 商品の説明
@@ -109,8 +126,8 @@ public class Pc_Exhibit extends Pc_Mercari {
 					this.selectByText(INT_6,this.day);
 				}else{
 					// 配送の方法
-					if(StringUtils.isNotEmpty(this.delivery_f)){
-						this.selectByText(INT_5,this.delivery_f);
+					if(StringUtils.isNotEmpty(this.delivery_m)){
+						this.selectByText(INT_5,this.delivery_m);
 					}else{
 						this.selectByText(INT_5,DEFAULT_DELIVERY);
 					}
@@ -145,20 +162,17 @@ public class Pc_Exhibit extends Pc_Mercari {
 					this.selectByText(INT_8,this.day);
 				}
 			}else{
-				System.out.println("【エラー】：出品が失敗しました。");
-				driver.quit();
+				System.out.println("【エラー】：" + this.name + "出品が失敗しました。");
 				return Boolean.FALSE;
 			}
 			// 価格
 			this.sendKeysByInput(INT_2,this.price);
 			//「出品する」ボタンをクリックする
 			this.click();
-			// ブラウザドライバーを終了する
-			driver.quit();
 			return Boolean.TRUE;
 		} catch (Exception e) {
-			driver.quit();
-			System.out.println("【エラー】：出品が失敗しました。");
+			System.out.println("【エラー】：" + this.name + "出品が失敗しました。");
+			System.out.println(e.getMessage());
 			return Boolean.FALSE;
 		}
 	}
@@ -200,6 +214,37 @@ public class Pc_Exhibit extends Pc_Mercari {
 		this.day = bean.getDay();
 		// 価格
 		this.price = bean.getPrice();
+	}
+
+	/**
+	 * =================================================================================================================
+	 * 商品情報項目を設定する
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void setImage() {
+		// ファイル名の一覧を取得する
+        File file = new File("images/" + this.userId + "/" + this.images_path);
+        File files[] = file.listFiles();
+        // 取得した一覧を表示する
+        for (int i=0; i<files.length; i++) {
+        	driver.findElement(By.className("sell-upload-drop-file")).sendKeys(files[i].getAbsolutePath());
+        }
+
+	}
+
+	/**
+	 * =================================================================================================================
+	 * ブラウザドライバーを終了する
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void driverQuit() {
+		driver.quit();
 	}
 
 	/**

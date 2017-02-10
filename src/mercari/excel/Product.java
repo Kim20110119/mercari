@@ -39,10 +39,10 @@ public class Product {
 	 * @author kimC
 	 *
 	 */
-	public List<ProductBean> execute() {
+	public List<ProductBean> execute(String userId) {
 		List<ProductBean> list = new ArrayList<ProductBean>();
 		try {
-			filein = new FileInputStream("excel/商品.xlsx");
+			filein = new FileInputStream("excel/" + userId + "/商品.xlsx");
 			workbook = new XSSFWorkbook(filein);
 			// 「出品データ」シート
 			sheet = workbook.getSheet("出品データ");
@@ -77,7 +77,7 @@ public class Product {
 					Cell cell_7 = row.getCell(7);
 					bean.setBrand(this.getCellValue(cell_7));
 					// 商品の状態
-					Cell cell_8 = row.getCell(7);
+					Cell cell_8 = row.getCell(8);
 					bean.setState(this.getCellValue(cell_8));
 					// 配送料の負担
 					Cell cell_9 = row.getCell(9);
