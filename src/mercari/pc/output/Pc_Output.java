@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 
+import mercari.bean.OutputBean;
 import mercari.pc.Pc_Mercari;
 
 /**
@@ -83,6 +84,9 @@ public class Pc_Output extends Pc_Mercari {
 					// コメントある商品を検索し、新しいタブで商品詳細画面を開く
 					for(int j = 0; j < p_count; j++){
 						String status = this.getStatus(j);
+						this.openTab(this.getDetailUrl(j));
+						driver.get(this.getUrlByTab());
+						this.getBean(i);
 						if(status.equals(STR_WAIT_0)){
 							this.openTab(this.getDetailUrl(j));
 							driver.get(this.getUrlByTab());
@@ -149,6 +153,23 @@ public class Pc_Output extends Pc_Mercari {
 		}catch(Exception e){
 		}
 		return status;
+	}
+
+	/**
+	 * =================================================================================================================
+	 * 取引中商品のスタータスを取得する
+	 * =================================================================================================================
+	 *
+	 * @param int i インデクス
+	 * @return String status 取引中商品のスタータス
+	 *
+	 * @author kimC
+	 *
+	 */
+	public OutputBean getBean(int i) {
+		OutputBean bean = new OutputBean();
+		String name = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_0).getText();
+		return bean;
 	}
 
 	/**
