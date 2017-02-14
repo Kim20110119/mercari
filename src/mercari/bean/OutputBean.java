@@ -16,6 +16,8 @@ public class OutputBean {
 	private String id;
 	/** 商品名 */
 	private String name;
+	/** 販売価格 */
+	private String price;
 	/** 販売手数料 */
 	private String commission;
 	/** 販売利益 */
@@ -45,6 +47,18 @@ public class OutputBean {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	/**
+	 * @return 販売価格
+	 */
+	public String getPrice() {
+		return price;
+	}
+	/**
+	 * @param 販売価格をセットする
+	 */
+	public void setPrice(String price) {
+		this.price = price;
 	}
 	/**
 	 * @return 販売手数料

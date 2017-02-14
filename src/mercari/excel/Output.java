@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -54,7 +55,7 @@ public class Output {
 		this.list = pList;
 		// ステータス
 		this.status = pStatus;
-		//
+		// EXCEL出力フォルダを作成する
 		File file = new File("excel/" + pUserId);
 		if(!file.exists()){
 			file.mkdir();
@@ -77,17 +78,21 @@ public class Output {
 		// シートを「サンプル」という名前で作成
 		Sheet sheet = workbook.createSheet("商品");
 		// 商品項目セルを作成する
+		// 行
 		Row row = sheet.createRow(0);
+		// 列
 		Cell a1 = row.createCell(0);  // 「A1」
 		a1.setCellValue("商品ID");
 		Cell b1 = row.createCell(1);  // 「B1」
 		b1.setCellValue("商品名");
 		Cell c1 = row.createCell(2);  // 「C1」
-		c1.setCellValue("販売手数料");
+		c1.setCellValue("販売価格");
 		Cell d1 = row.createCell(3);  // 「D1」
-		d1.setCellValue("販売利益");
+		d1.setCellValue("販売手数料");
 		Cell e1 = row.createCell(4);  // 「E1」
-		e1.setCellValue("お届け先");
+		e1.setCellValue("販売利益");
+		Cell f1 = row.createCell(5);  // 「E1」
+		f1.setCellValue("お届け先");
 	    // セルのスタイル
 	    CellStyle style =  workbook.createCellStyle();
 	    // フォント
@@ -100,6 +105,7 @@ public class Output {
 	    c1.setCellStyle(style);
 	    d1.setCellStyle(style);
 	    e1.setCellStyle(style);
+	    f1.setCellStyle(style);
 	    int index = 1;
 	    if(list != null){
 	    	for(OutputBean bean : list){
@@ -113,13 +119,16 @@ public class Output {
 				b_index.setCellValue(bean.getName());       // 商品名
 				// 「C_Index」
 				Cell c_index = row_index.createCell(2);
-				c_index.setCellValue(bean.getCommission()); // 販売手数料
+				c_index.setCellValue(bean.getPrice());      // 販売価格
 				// 「D_Index」
 				Cell d_index = row_index.createCell(3);
-				d_index.setCellValue(bean.getProfit());     // 販売利益
+				d_index.setCellValue(bean.getCommission()); // 販売手数料
 				// 「E_Index」
 				Cell e_index = row_index.createCell(4);
-				e_index.setCellValue(bean.getDelivery());   // お届け先
+				e_index.setCellValue(bean.getProfit());     // 販売利益
+				// 「F_Index」
+				Cell f_index = row_index.createCell(5);
+				f_index.setCellValue(bean.getDelivery());   // お届け先
 		    }
 	    }
 	    // ファイル入出力ストリーム
@@ -127,16 +136,8 @@ public class Output {
 	    try {
 	    	// ステータスによりファイル名を確認する
 	    	String fileName = "Sample";
-	    	switch (this.status){
-	    	  case "0":
-	    	    fileName = "発送待ち";
-	    	    break;
-	    	  case "1":
-	    		  fileName = "受取評価待ち";
-	    	    break;
-	    	  case "2":
-	    		  fileName = "評価待ち";
-	    	    break;
+	    	if(StringUtils.isNotEmpty(this.status)){
+	    		fileName = this.status;
 	    	}
 			// 出力先のファイルを指定
 			out = new FileOutputStream("excel/" + userId + "/" + fileName + ".xlsx");

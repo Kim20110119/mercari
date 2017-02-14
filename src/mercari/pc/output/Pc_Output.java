@@ -2,11 +2,15 @@ package mercari.pc.output;
 
 import static common.constant.MercariConstants.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 
 import mercari.bean.OutputBean;
+import mercari.excel.Output;
 import mercari.pc.Pc_Mercari;
 
 /**
@@ -33,6 +37,13 @@ public class Pc_Output extends Pc_Mercari {
 	String message;
 	/** WindowsID */
 	String originalHandel;
+	/** 「発送待ち」商品リスト */
+	List<OutputBean> list_0 = new ArrayList<OutputBean>();
+	/** 「受取評価待ち」商品リスト */
+	List<OutputBean> list_1 = new ArrayList<OutputBean>();;
+	/** 「評価待ち」商品リスト */
+	List<OutputBean> list_2 = new ArrayList<OutputBean>();;
+
 
 	//==================================================================================================================
 	// JavaScript
@@ -84,29 +95,35 @@ public class Pc_Output extends Pc_Mercari {
 					// コメントある商品を検索し、新しいタブで商品詳細画面を開く
 					for(int j = 0; j < p_count; j++){
 						String status = this.getStatus(j);
-						this.openTab(this.getDetailUrl(j));
-						driver.get(this.getUrlByTab());
-						this.getBean(i);
 						if(status.equals(STR_WAIT_0)){
-							this.openTab(this.getDetailUrl(j));
-							driver.get(this.getUrlByTab());
-							String tt = driver.findElements(By.className("transact-info-head")).get(INT_0).getText();
-							System.out.println(tt);
+							// 「発送待ち」
+							list_0.add(this.getBean(j));
+							this.tab_close();
 						}else if(status.equals(STR_WAIT_1)){
-							this.openTab(this.getDetailUrl(j));
-							driver.get(this.getUrlByTab());
-							String tt = driver.findElements(By.className("transact-info-head")).get(INT_0).getText();
-							System.out.println(tt);
+							// 「受取評価待ち」
+							list_1.add(this.getBean(j));
 							this.tab_close();
 						}else if(status.equals(STR_WAIT_2)){
-							this.openTab(this.getDetailUrl(j));
+							// 「評価待ち」
+							list_2.add(this.getBean(j));
+							this.tab_close();
 						}else{
-							this.openTab(this.getDetailUrl(j));
 						}
 					}
 					// 「次のページ」
 					this.pagerNext();
 				}
+			}
+			// 商品リストをEXCELで出力する
+			Output output = new Output();
+			if(list_0.size() > 0){
+				output.execute(userId, list_0, STR_WAIT_0);
+			}
+			if(list_1.size() > 0){
+				output.execute(userId, list_1, STR_WAIT_1);
+			}
+			if(list_2.size() > 0){
+				output.execute(userId, list_2, STR_WAIT_2);
 			}
 			return Boolean.TRUE;
 		} catch (Exception e) {
@@ -167,8 +184,41 @@ public class Pc_Output extends Pc_Mercari {
 	 *
 	 */
 	public OutputBean getBean(int i) {
+		// 取引中商品詳細画面を開く
+		this.openTab(this.getDetailUrl(i));
+		// 商品詳細画面タブへ遷移する
+		driver.get(this.getUrlByTab());
+		// 出力商品Bean
 		OutputBean bean = new OutputBean();
+		// 商品名
 		String name = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_0).getText();
+		if(StringUtils.isNotEmpty(name)){
+			// 商品名
+			bean.setName(name.split("\n")[0]);
+			// 販売価格
+			bean.setPrice(name.split("\n")[1]);
+		}
+		// 販売手数料
+		String commission = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_2).getText();
+		if(StringUtils.isNotEmpty(commission)){
+			bean.setCommission(commission);
+		}
+		// 販売利益
+		String profit = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_3).getText();
+		if(StringUtils.isNotEmpty(profit)){
+			bean.setProfit(profit);
+		}
+		// 商品ID
+		String id = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_5).getText();
+		if(StringUtils.isNotEmpty(id)){
+			bean.setId(id);
+		}
+		// お届け先
+		String delivery = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_6).getText();
+		delivery = delivery.replaceAll("\n", "　");
+		if(StringUtils.isNotEmpty(delivery)){
+			bean.setDelivery(delivery);
+		}
 		return bean;
 	}
 
