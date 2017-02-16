@@ -1,5 +1,7 @@
 package mercari.excel;
 
+import static common.Common.*;
+
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import mercari.bean.AccountBean;
 import mercari.bean.ProductBean;
 
 public class Product {
@@ -105,6 +108,44 @@ public class Product {
 			System.out.println("処理が失敗しました");
 		}
 		return list;
+	}
+	
+	/**
+	 * =================================================================================================================
+	 * EXCELからアカウントを取得する
+	 * =================================================================================================================
+	 *
+	 * @return AccountBean account
+	 *
+	 * @author kimC
+	 *
+	 */
+	public AccountBean getAccount(String userId) {
+		AccountBean bean = new AccountBean();
+		try {
+			filein = new FileInputStream("excel/" + userId + "/商品.xlsx");
+			workbook = new XSSFWorkbook(filein);
+			// 「出品データ」シート
+			sheet = workbook.getSheet("アカウント");
+			Row row = sheet.getRow(1);
+			// アカウント
+			Cell cell_0 = row.getCell(0);
+			bean.setMail(this.getCellValue(cell_0));
+			// パスワード
+			Cell cell_1 = row.getCell(1);
+			bean.setPassword(this.getCellValue(cell_1));
+			// 出品時間
+			Cell cell_2 = row.getCell(2);
+			String m =  this.getCellValue(cell_2);
+			Integer s = getInt(m) * 60 * 1000;
+			bean.setTime(s);
+			workbook.close();
+			filein.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("処理が失敗しました");
+		}
+		return bean;
 	}
 
 	/**

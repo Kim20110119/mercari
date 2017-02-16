@@ -1,5 +1,6 @@
 package mercari.pc;
 
+import static common.Common.*;
 import static common.constant.MercariConstants.*;
 
 import org.openqa.selenium.By;
@@ -34,16 +35,33 @@ public class Pc_Mercari extends Mercari {
 	 *
 	 */
 	public void login(String id, String pass){
-		// ログインメールアドレス
-		driver.findElement(By.name("email")).sendKeys(id);
-		// ログインパスワード
-		driver.findElement(By.name("password")).sendKeys(pass);
-		// ロボットチェック
-		driver.findElement(By.className("g-recaptcha")).click();
-		// 10秒待ち
-		sleep(10000);
-		// ログインボタン
-		driver.findElement(By.className("login-submit")).click();
+		try{
+			// ログインメールアドレス
+			driver.findElement(By.name("email")).sendKeys(id);
+			// ログインパスワード
+			driver.findElement(By.name("password")).sendKeys(pass);
+			// ロボットチェック
+			driver.findElement(By.className("g-recaptcha")).click();
+			Boolean loginFlag = Boolean.TRUE;
+			// 1時間後に手動でログインしてない場合、自動でログインするようにする(※　認証してないとログインエラー表示)
+			for(int i = 0; i < 3600; i++){
+				// 現在のURLを取得する
+				String url = driver.getCurrentUrl();
+				// ログイン後URLかを判断する
+				if(url.equals("https://www.mercari.com/jp/")){
+					loginFlag = Boolean.FALSE;
+					break;
+				}
+				// 10秒待ち
+				sleep(1000);
+			}
+			if(loginFlag){
+				// ログインボタン
+				driver.findElement(By.className("login-submit")).click();
+			}
+		}catch (Exception e){
+			System.out.println("【エラー】：ログイン失敗しました。");
+		}	
 	}
 
 }

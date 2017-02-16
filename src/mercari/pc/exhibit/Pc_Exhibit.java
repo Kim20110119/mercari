@@ -1,6 +1,7 @@
 package mercari.pc.exhibit;
 
 import static common.constant.MercariConstants.*;
+import static common.Common.*;
 
 import java.io.File;
 
@@ -8,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
+import mercari.bean.AccountBean;
 import mercari.bean.ProductBean;
 import mercari.pc.Pc_Mercari;
 
@@ -71,12 +73,14 @@ public class Pc_Exhibit extends Pc_Mercari {
 	/**
 	 * コンストラクタ
 	 */
-	public Pc_Exhibit(String id, String pass) {
+	public Pc_Exhibit(AccountBean account) {
 		// ユーザーID
-		this.userId = id;
+		this.userId = account.getMail();
 		// ユーザーパスワード
-		this.userPass = pass;
+		this.userPass = account.getPassword();
 		super.login(this.userId, this.userPass);
+		// 指定時間まで出品を待つ
+		sleep(account.getTime());
 	}
 
 	/**
@@ -167,6 +171,8 @@ public class Pc_Exhibit extends Pc_Mercari {
 			}
 			// 価格
 			this.sendKeysByInput(INT_2,this.price);
+			// 0～5秒待ち（ランダム）
+			this.sleep(int_random(INT_5) * 1000);
 			//「出品する」ボタンをクリックする
 			this.click();
 			// 2秒待ち

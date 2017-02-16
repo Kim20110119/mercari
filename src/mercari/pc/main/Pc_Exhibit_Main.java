@@ -1,5 +1,6 @@
 package mercari.pc.main;
 
+import mercari.bean.AccountBean;
 import mercari.bean.ProductBean;
 import mercari.excel.Product;
 import mercari.pc.exhibit.Pc_Exhibit;
@@ -14,8 +15,10 @@ import mercari.pc.exhibit.Pc_Exhibit;
  */
 public class Pc_Exhibit_Main {
 	public static void main(String[] args) {
-		Pc_Exhibit exhibit = new Pc_Exhibit(args[0],args[1]);
 		Product product = new Product();
+		AccountBean account = product.getAccount(args[0]);
+		Pc_Exhibit exhibit = new Pc_Exhibit(account);
+		
 		for(ProductBean bean : product.execute(args[0])){
 			exhibit.execute(bean);
 		}
