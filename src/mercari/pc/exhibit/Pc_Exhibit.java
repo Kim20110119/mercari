@@ -169,6 +169,8 @@ public class Pc_Exhibit extends Pc_Mercari {
 			this.sendKeysByInput(INT_2,this.price);
 			//「出品する」ボタンをクリックする
 			this.click();
+			// 2秒待ち
+			this.sleep(2000);
 			return Boolean.TRUE;
 		} catch (Exception e) {
 			System.out.println("【エラー】：" + this.name + "出品が失敗しました。");
