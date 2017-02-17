@@ -1,4 +1,4 @@
-package mercari.pc.main;
+package mercari.sample;
 
 import mercari.pc.delete.Pc_Delete;
 
