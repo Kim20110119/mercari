@@ -26,4 +26,4 @@ public class Pc_Output_Main {
 		System.out.println("【" + args[0] + "】アカウントの【発送待ち】【評価待ち】商品の抽出処理完了！！！");
 	}
 
-}ｓ
+}
