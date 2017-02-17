@@ -1,8 +1,11 @@
 package mercari.excel;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,7 +55,7 @@ public class CreateFolder {
 	 * @author kimC
 	 *
 	 */
-	public void execute() throws IOException {
+	public void execute(){
 		try {
 			filein = new FileInputStream("アカウントリスト.xlsx");
 			workbook = new XSSFWorkbook(filein);
@@ -69,6 +72,8 @@ public class CreateFolder {
 					this.createFolde(this.getCellValue(cell_0));
 					// サンプルファイルをコピーする
 					this.copyFile(this.getCellValue(cell_0));
+					// バッチファイルを作成する
+					this.createBatFile(this.getCellValue(cell_0));
 				}
 				index++;
 			}
@@ -76,7 +81,7 @@ public class CreateFolder {
 			filein.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("処理が失敗しました");
+			System.out.println("【エラー】：バッチファイル作成処理が失敗しました");
 		}
 	}
 
@@ -135,6 +140,61 @@ public class CreateFolder {
 			System.out.println("【エラー】：ファイルコピー失敗！");
 		}
 
+	}
+
+	/**
+	 * =================================================================================================================
+	 * サンプルから商品EXCELとアカウント情報をコピーする
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void createBatFile(String account) {
+		try{
+			// 出品バッチファイルを作成
+			File exhibit_file = new File("excel/" + account + "/自動出品.bat");
+			if(!exhibit_file.exists()){
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(exhibit_file)));
+				pw.println("cd ..");
+				pw.println("cd ..");
+				pw.println("java -jar exhibit.jar " + account);
+				pw.println("@pause");
+				pw.close();
+			}
+			// 【コメント】バッチファイルを作成
+			File comment_file = new File("excel/" + account + "/コメント.bat");
+			if(!comment_file.exists()){
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(comment_file)));
+				pw.println("cd ..");
+				pw.println("cd ..");
+				pw.println("java -jar comment.jar " + account);
+				pw.println("@pause");
+				pw.close();
+			}
+			// 【支払い待ち】バッチファイルを作成
+			File wait_payment_file = new File("excel/" + account + "/支払い待ち.bat");
+			if(!wait_payment_file.exists()){
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(wait_payment_file)));
+				pw.println("cd ..");
+				pw.println("cd ..");
+				pw.println("java -jar wait_payment.jar " + account);
+				pw.println("@pause");
+				pw.close();
+			}
+			// 【発送待ち】【評価待ち】バッチファイルを作成
+			File output_file = new File("excel/" + account + "/商品出力.bat");
+			if(!output_file.exists()){
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(output_file)));
+				pw.println("cd ..");
+				pw.println("cd ..");
+				pw.println("java -jar output.jar " + account);
+				pw.println("@pause");
+				pw.close();
+			}
+		}catch(IOException e){
+			System.out.println(e);
+		}
 	}
 
 	/**

@@ -6,7 +6,7 @@ public class Sample_Main {
 	public static void main(String[] args) {
 		try {
 			CreateFolder createFolder = new CreateFolder();
-			createFolder.execute();
+			createFolder.createBatFile("ttxzyo7i0qu47@yahoo.co.jp");;
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("処理が失敗しました");
