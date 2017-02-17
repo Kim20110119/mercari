@@ -109,7 +109,7 @@ public class Product {
 		}
 		return list;
 	}
-	
+
 	/**
 	 * =================================================================================================================
 	 * EXCELからアカウントを取得する
@@ -139,6 +139,16 @@ public class Product {
 			String m =  this.getCellValue(cell_2);
 			Integer s = getInt(m) * 60 * 1000;
 			bean.setTime(s);
+			// Wifi
+			Cell cell_3 = row.getCell(3);
+			Boolean wifiFlag = Boolean.FALSE;
+			if("1".equals(this.getCellValue(cell_3))){
+				wifiFlag = Boolean.TRUE;
+			}
+			bean.setWifi(wifiFlag);
+			// Wifiパスワード
+			Cell cell_4 = row.getCell(4);
+			bean.setWifiPassword(this.getCellValue(cell_4));
 			workbook.close();
 			filein.close();
 		} catch (Exception e) {

@@ -1,7 +1,5 @@
 package common;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
@@ -43,7 +41,7 @@ public class Common {
 		return i;
 	}
 
-	
+
 	/**
 	 * 文字列のマッチ判断する処理.<BR>
 	 *
@@ -64,5 +62,17 @@ public class Common {
 		}
 	}
 
+	/**
+	 * sleep処理
+	 *
+	 * @param long ミリ秒
+	 */
+	public static void sleep(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
 
 }

@@ -56,27 +56,70 @@ public class AllOutput {
 		// ステータス
 		this.status = pStatus;
 		// EXCEL出力フォルダを作成する
-		File file = new File("excel/output");
+		File file = new File("output");
 		if(!file.exists()){
 			file.mkdir();
 		}
+		// EXCEL出力フォルダを作成する
+		File excel = new File("output/" + this.status + ".xlsx");
+		if(!excel.exists()){
+			this.createExcel();
+		}
+		filein = new FileInputStream("output/" + this.status + ".xlsx");
 		// 出力EXCELを作成する
-		this.create();
+		this.createSheet();
 	}
 
 	/**
 	 * =================================================================================================================
-	 * 商品情報を抽出してEXCELファイルで出力する
+	 * EXCELファイルを作成する
 	 * =================================================================================================================
 	 *
 	 * @author kimC
 	 *
 	 */
-	public void create() throws IOException {
+	public void createExcel() throws IOException {
 		// Excel2007以降の「.xlsx」形式のファイルの素を作成
 		workbook = new XSSFWorkbook();
-		// シートを「サンプル」という名前で作成
-		Sheet sheet = workbook.createSheet("商品");
+	    // ファイル入出力ストリーム
+	    FileOutputStream out = null;
+	    try {
+	    	// ステータスによりファイル名を確認する
+	    	String fileName = "Sample";
+	    	if(StringUtils.isNotEmpty(this.status)){
+	    		fileName = this.status;
+	    	}
+			// 出力先のファイルを指定
+			out = new FileOutputStream("output/" + fileName + ".xlsx");
+			// 上記で作成したブックを出力先に書き込み
+			workbook.write(out);
+	    } catch (FileNotFoundException e) {
+	    	System.out.println(e.getStackTrace());
+	    } finally {
+			// 最後はちゃんと閉じておきます
+			out.close();
+			workbook.close();
+	    }
+	}
+
+	/**
+	 * =================================================================================================================
+	 * 商品情報を抽出して該当するEXCELファイルのシートで出力する
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void createSheet() throws IOException {
+		workbook = new XSSFWorkbook(filein);
+		// 「出品データ」シート
+		sheet = workbook.getSheet(this.userId);
+		// アカウントシート存在する場合、該当シートを削除
+		if(sheet != null){
+			workbook.removeSheetAt(workbook.getSheetIndex(this.userId));
+		}
+		// アカウントごとにシートを作成する
+		Sheet sheet = workbook.createSheet(this.userId);
 		// 商品項目セルを作成する
 		// 行
 		Row row = sheet.createRow(0);
@@ -140,7 +183,7 @@ public class AllOutput {
 	    		fileName = this.status;
 	    	}
 			// 出力先のファイルを指定
-			out = new FileOutputStream("excel/output" + fileName + ".xlsx");
+			out = new FileOutputStream("output/" + fileName + ".xlsx");
 			// 上記で作成したブックを出力先に書き込み
 			workbook.write(out);
 	    } catch (FileNotFoundException e) {

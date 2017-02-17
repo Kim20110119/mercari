@@ -56,7 +56,7 @@ public class Output {
 		// ステータス
 		this.status = pStatus;
 		// EXCEL出力フォルダを作成する
-		File file = new File("excel/" + pUserId);
+		File file = new File("output/" + pUserId);
 		if(!file.exists()){
 			file.mkdir();
 		}
@@ -140,7 +140,7 @@ public class Output {
 	    		fileName = this.status;
 	    	}
 			// 出力先のファイルを指定
-			out = new FileOutputStream("excel/" + userId + "/" + fileName + ".xlsx");
+			out = new FileOutputStream("output/" + userId + "/" + fileName + ".xlsx");
 			// 上記で作成したブックを出力先に書き込み
 			workbook.write(out);
 	    } catch (FileNotFoundException e) {

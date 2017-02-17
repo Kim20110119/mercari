@@ -45,12 +45,14 @@ public class MercariConstants {
 	// ==================================================================================================================
 	// 【文字列】
 	// ==================================================================================================================
+	/** 支払い待ち */
+	public final static String STR_WAIT_0 = "支払い待ち";
 	/** 発送待ち */
-	public final static String STR_WAIT_0 = "発送待ち";
+	public final static String STR_WAIT_1 = "発送待ち";
 	/** 受取評価待ち */
-	public final static String STR_WAIT_1 = "受取評価待ち";
+	public final static String STR_WAIT_2 = "受取評価待ち";
 	/** 評価待ち */
-	public final static String STR_WAIT_2 = "評価待ち";
+	public final static String STR_WAIT_3 = "評価待ち";
 	/** 【出品中の商品がありません】 */
 	public static final String STR_LISTING = ".*出品中の商品がありません.*";
 	/** 【取引中の商品がありません】 */

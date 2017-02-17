@@ -18,6 +18,10 @@ public class AccountBean {
 	private String password;
 	/** 出品時間 */
 	private Integer time;
+	/** Wifi */
+	private Boolean wifi;
+	/** Wifiパスワード */
+	private String wifiPassword;
 	/**
 	 * @return アカウント
 	 */
@@ -54,7 +58,29 @@ public class AccountBean {
 	public void setTime(Integer time) {
 		this.time = time;
 	}
-	
-	
-	
+	/**
+	 * @return Wifi
+	 */
+	public Boolean getWifi() {
+		return wifi;
+	}
+	/**
+	 * @param Wifiをセットする
+	 */
+	public void setWifi(Boolean wifi) {
+		this.wifi = wifi;
+	}
+	/**
+	 * @return Wifiパスワード
+	 */
+	public String getWifiPassword() {
+		return wifiPassword;
+	}
+	/**
+	 * @param Wifiパスワードをセットする
+	 */
+	public void setWifiPassword(String wifiPassword) {
+		this.wifiPassword = wifiPassword;
+	}
+
 }

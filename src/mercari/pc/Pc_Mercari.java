@@ -61,7 +61,8 @@ public class Pc_Mercari extends Mercari {
 			}
 		}catch (Exception e){
 			System.out.println("【エラー】：ログイン失敗しました。");
-		}	
+			driver.quit();
+		}
 	}
 
 }

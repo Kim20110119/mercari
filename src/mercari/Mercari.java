@@ -110,20 +110,6 @@ public class Mercari {
 	}
 
 	/**
-	 * sleep処理
-	 *
-	 * @param long
-	 *            millis
-	 */
-	public void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
-
-	/**
 	 * エレメントサイズ取得処理
 	 *
 	 * @param By

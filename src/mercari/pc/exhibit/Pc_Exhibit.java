@@ -1,7 +1,7 @@
 package mercari.pc.exhibit;
 
-import static common.constant.MercariConstants.*;
 import static common.Common.*;
+import static common.constant.MercariConstants.*;
 
 import java.io.File;
 
@@ -172,11 +172,11 @@ public class Pc_Exhibit extends Pc_Mercari {
 			// 価格
 			this.sendKeysByInput(INT_2,this.price);
 			// 0～5秒待ち（ランダム）
-			this.sleep(int_random(INT_5) * 1000);
+			sleep(int_random(INT_5) * 1000);
 			//「出品する」ボタンをクリックする
 			this.click();
 			// 2秒待ち
-			this.sleep(2000);
+			sleep(2000);
 			return Boolean.TRUE;
 		} catch (Exception e) {
 			System.out.println("【エラー】：" + this.name + "出品が失敗しました。");
@@ -323,20 +323,6 @@ public class Pc_Exhibit extends Pc_Mercari {
 			return size;
 		}
 
-	}
-
-	/**
-	 * sleep処理
-	 *
-	 * @param long
-	 *            millis
-	 */
-	public void sleep(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
 	}
 
 }
