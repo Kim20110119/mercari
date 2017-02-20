@@ -22,6 +22,8 @@ public class AccountBean {
 	private Boolean wifi;
 	/** Wifiパスワード */
 	private String wifiPassword;
+	/** ユーザーエージェント */
+	private String userAgent;
 	/**
 	 * @return アカウント
 	 */
@@ -81,6 +83,18 @@ public class AccountBean {
 	 */
 	public void setWifiPassword(String wifiPassword) {
 		this.wifiPassword = wifiPassword;
+	}
+	/**
+	 * @return ユーザーエージェント
+	 */
+	public String getUserAgent() {
+		return userAgent;
+	}
+	/**
+	 * @param ユーザーエージェントをセットする
+	 */
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
 	}
 
 }

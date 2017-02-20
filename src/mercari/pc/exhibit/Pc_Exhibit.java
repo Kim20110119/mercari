@@ -7,11 +7,13 @@ import java.io.File;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
 
 import mercari.bean.AccountBean;
 import mercari.bean.ProductBean;
-import mercari.pc.Pc_Mercari;
 
 /**
  * =====================================================================================================================
@@ -21,7 +23,7 @@ import mercari.pc.Pc_Mercari;
  * @author kimC
  *
  */
-public class Pc_Exhibit extends Pc_Mercari {
+public class Pc_Exhibit{
 	//==================================================================================================================
 	// 定数
 	//==================================================================================================================
@@ -29,6 +31,9 @@ public class Pc_Exhibit extends Pc_Mercari {
 	public final static String DEFAULT_SIZE = "FREE SIZE";
 	/** 配送の方法デフォルト */
 	public static final String DEFAULT_DELIVERY = "未定";
+
+	/** WEBドライバー */
+	WebDriver driver;
 
 	//==================================================================================================================
 	// メルカリアカウント
@@ -78,9 +83,63 @@ public class Pc_Exhibit extends Pc_Mercari {
 		this.userId = account.getMail();
 		// ユーザーパスワード
 		this.userPass = account.getPassword();
-		super.login(this.userId, this.userPass);
+		// Chromeドライバーをプロパティへ設定
+		System.setProperty("webdriver.chrome.driver", "lib/chromedriver.exe");
+		if(StringUtils.isNotEmpty(account.getUserAgent())){
+			// ユーザーエージェントを上書きして、起動する
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--user-agent=" + account.getUserAgent() );
+			driver = new ChromeDriver(options);
+		}else{
+			driver = new ChromeDriver();
+		}
+		// ログイン画面
+		driver.get(PC_LOGIN_URL);
+		this.login(this.userId, this.userPass);
 		// 指定時間まで出品を待つ
 		sleep(account.getTime());
+	}
+
+	/**
+	 * =================================================================================================================
+	 * メルカリログイン処理
+	 * =================================================================================================================
+	 *
+	 * @param String id ユーザーID
+	 * @param String pass ユーザーパスワード
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void login(String id, String pass){
+		try{
+			// ログインメールアドレス
+			driver.findElement(By.name("email")).sendKeys(id);
+			// ログインパスワード
+			driver.findElement(By.name("password")).sendKeys(pass);
+			// ロボットチェック
+			driver.findElement(By.className("g-recaptcha")).click();
+			Boolean loginFlag = Boolean.TRUE;
+			// 1時間後に手動でログインしてない場合、自動でログインするようにする(※　認証してないとログインエラー表示)
+			for(int i = 0; i < 3600; i++){
+				// 現在のURLを取得する
+				String url = driver.getCurrentUrl();
+				// ログイン後URLかを判断する
+				if(url.equals("https://www.mercari.com/jp/")){
+					loginFlag = Boolean.FALSE;
+					break;
+				}
+				// 10秒待ち
+				sleep(1000);
+			}
+			if(loginFlag){
+				// ログインボタン
+				driver.findElement(By.className("login-submit")).click();
+			}
+		}catch (Exception e){
+			System.out.println("【エラー】：ログイン失敗しました。");
+			driver.quit();
+		}
 	}
 
 	/**

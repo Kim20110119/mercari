@@ -149,6 +149,9 @@ public class Product {
 			// Wifiパスワード
 			Cell cell_4 = row.getCell(4);
 			bean.setWifiPassword(this.getCellValue(cell_4));
+			// ユーザーエージェント
+			Cell cell_5 = row.getCell(5);
+			bean.setUserAgent(this.getCellValue(cell_5));
 			workbook.close();
 			filein.close();
 		} catch (Exception e) {

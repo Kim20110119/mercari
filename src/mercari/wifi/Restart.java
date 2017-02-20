@@ -31,19 +31,21 @@ public class Restart {
 	 *
 	 */
 	public void execute(String password) {
+		// Chromeドライバーをプロパティへ設定
+		System.setProperty("webdriver.chrome.driver", "lib/chromedriver.exe");
+		// 「WEBドライバー」
+		WebDriver driver = new ChromeDriver();
 		try{
-			// Chromeドライバーをプロパティへ設定
-			System.setProperty("webdriver.chrome.driver", "lib/chromedriver.exe");
-			/** 「WEBドライバー」 */
-			WebDriver driver = new ChromeDriver();
 			driver.get("http://admin:" + password + "@192.168.179.1/index.cgi/reboot_main");
 			driver.findElement(By.id("UPDATE_BUTTON")).click();
 			driver.switchTo().alert().accept();
 			sleep(100000);
 			driver.switchTo().alert().accept();
 			System.out.println("Wifi再起動成功！");
+			driver.quit();
 		}catch (Exception e) {
 			System.out.println("【エラー】：Wifi再起動失敗！");
+			driver.quit();
 		}
 	}
 }

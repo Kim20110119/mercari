@@ -68,6 +68,9 @@ public class CreateFolder {
 				if(index > 0){
 					// メールアドレス
 					Cell cell_0 = row.getCell(0);
+					if(StringUtils.isEmpty(this.getCellValue(cell_0))){
+						break;
+					}
 					// アカウントごとにフォルダを作成する
 					this.createFolde(this.getCellValue(cell_0));
 					// サンプルファイルをコピーする
@@ -121,13 +124,6 @@ public class CreateFolder {
 	 */
 	public void copyFile(String account) {
 		try{
-			File account_file = new File("excel/" + account + "/アカウント.xlsx");
-			if(!account_file.exists()){
-				// アカウントEXCELコピーする
-				Path account_input = FileSystems.getDefault().getPath("excel/sample/アカウント.xlsx");
-				Path account_output = FileSystems.getDefault().getPath("excel/" + account + "/アカウント.xlsx");
-				Files.copy(account_input, account_output);
-			}
 			File product_file = new File("excel/" + account + "/商品.xlsx");
 			if(!product_file.exists()){
 				// アカウントEXCELコピーする

@@ -11,7 +11,7 @@ import mercari.excel.CreateFolder;
  *
  */
 public class Pc_CreateFolder_Main {
-	public static void main() {
+	public static void main(String[] args) {
 		// バッチファイル作成の自動化処理
 		CreateFolder createFolder = new CreateFolder();
 		createFolder.execute();
