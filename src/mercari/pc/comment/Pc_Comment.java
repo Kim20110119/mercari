@@ -20,10 +20,6 @@ public class Pc_Comment extends Pc_Mercari {
 	//==================================================================================================================
 	// 定数
 	//==================================================================================================================
-	/** サイズデフォルト */
-	public final static String DEFAULT_SIZE = "FREE SIZE";
-	/** 配送の方法デフォルト */
-	public static final String DEFAULT_DELIVERY = "未定";
 
 	//==================================================================================================================
 	// メルカリアカウント
@@ -191,7 +187,12 @@ public class Pc_Comment extends Pc_Mercari {
 	 *
 	 */
 	public void pagerNext() {
-		driver.findElement(By.className("pager-next")).click();
+		try{
+			driver.findElement(By.className("pager-next")).click();
+		}catch (Exception e){
+			this.scroll(0, 100);
+			driver.findElement(By.className("pager-next")).click();
+		}
 	}
 
 	/**

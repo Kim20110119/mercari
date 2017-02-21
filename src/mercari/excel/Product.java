@@ -139,19 +139,20 @@ public class Product {
 			String m =  this.getCellValue(cell_2);
 			Integer s = getInt(m) * 60 * 1000;
 			bean.setTime(s);
-			// Wifi
+			// ユーザーエージェント
 			Cell cell_3 = row.getCell(3);
+			bean.setUserAgent(this.getCellValue(cell_3));
+			// Wifi
+			Cell cell_4 = row.getCell(4);
 			Boolean wifiFlag = Boolean.FALSE;
-			if("1".equals(this.getCellValue(cell_3))){
+			if("1".equals(this.getCellValue(cell_4))){
 				wifiFlag = Boolean.TRUE;
 			}
 			bean.setWifi(wifiFlag);
 			// Wifiパスワード
-			Cell cell_4 = row.getCell(4);
-			bean.setWifiPassword(this.getCellValue(cell_4));
-			// ユーザーエージェント
 			Cell cell_5 = row.getCell(5);
-			bean.setUserAgent(this.getCellValue(cell_5));
+			bean.setWifiPassword(this.getCellValue(cell_5));
+
 			workbook.close();
 			filein.close();
 		} catch (Exception e) {

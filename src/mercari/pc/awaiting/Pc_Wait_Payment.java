@@ -77,7 +77,7 @@ public class Pc_Wait_Payment extends Pc_Mercari {
 				}else{
 					// 商品一覧数を取得する
 					int p_count = driver.findElement(By.id("mypage-tab-transaction-old")).findElements(By.tagName("li")).size();
-					// コメントある商品を検索し、新しいタブで商品詳細画面を開く
+					// 【支払い待ち】商品を検索し、新しいタブで商品詳細画面を開く
 					for(int j = 0; j < p_count; j++){
 						if(this.getStatus(j).equals(STR_WAIT_0)){
 							this.openTab(this.getDetailUrl(j));
@@ -184,7 +184,12 @@ public class Pc_Wait_Payment extends Pc_Mercari {
 	 *
 	 */
 	public void pagerNext() {
-		driver.findElement(By.className("pager-next")).click();
+		try{
+			driver.findElement(By.className("pager-next")).click();
+		}catch (Exception e){
+			this.scroll(0, 100);
+			driver.findElement(By.className("pager-next")).click();
+		}
 	}
 
 	/**

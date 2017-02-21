@@ -93,7 +93,7 @@ public class Pc_Output extends Pc_Mercari {
 					// コメントある商品を検索し、新しいタブで商品詳細画面を開く
 					for(int j = 0; j < p_count; j++){
 						String status = this.getStatus(j);
-						if(status.equals(STR_WAIT_0)){
+						if(status.equals(STR_WAIT_1)){
 							// 「発送待ち」
 							list_1.add(this.getBean(j));
 							// 「商品の発送をしたので、発送通知をする」クリックする
@@ -128,7 +128,7 @@ public class Pc_Output extends Pc_Mercari {
 			}
 			return Boolean.TRUE;
 		} catch (Exception e) {
-			System.out.println("【エラー】：コメントある商品の抽出処理が失敗しました。");
+			System.out.println("【エラー】：【発送待ち】【評価待ち】商品の抽出処理が失敗しました。");
 			System.out.println(e.getMessage());
 			return Boolean.FALSE;
 		}
@@ -290,6 +290,7 @@ public class Pc_Output extends Pc_Mercari {
 		try {
 			driver.findElements(By.xpath("//button[@class='btn-red']")).get(INT_0).click();
 		} catch (Exception e) {
+			System.out.println("【エラー】：【発送待ち】【評価待ち】商品の抽出処理が失敗しました。");
 		}
 
 	}
@@ -352,7 +353,12 @@ public class Pc_Output extends Pc_Mercari {
 	 *
 	 */
 	public void pagerNext() {
-		driver.findElement(By.className("pager-next")).click();
+		try{
+			driver.findElement(By.className("pager-next")).click();
+		}catch (Exception e){
+			this.scroll(0, 100);
+			driver.findElement(By.className("pager-next")).click();
+		}
 	}
 
 	/**

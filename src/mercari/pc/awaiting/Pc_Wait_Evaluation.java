@@ -264,7 +264,12 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 	 *
 	 */
 	public void pagerNext() {
-		driver.findElement(By.className("pager-next")).click();
+		try{
+			driver.findElement(By.className("pager-next")).click();
+		}catch (Exception e){
+			this.scroll(0, 100);
+			driver.findElement(By.className("pager-next")).click();
+		}
 	}
 
 	/**

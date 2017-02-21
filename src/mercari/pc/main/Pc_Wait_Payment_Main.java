@@ -2,7 +2,7 @@ package mercari.pc.main;
 
 import mercari.bean.AccountBean;
 import mercari.excel.Product;
-import mercari.pc.awaiting.Pc_Awaiting;
+import mercari.pc.awaiting.Pc_Wait_Payment;
 
 /**
  * =====================================================================================================================
@@ -18,8 +18,8 @@ public class Pc_Wait_Payment_Main {
 		// アカウント情報を取得する
 		AccountBean account = product.getAccount(args[0]);
 		// 【支払い待ち】商品詳細表示処理
-		Pc_Awaiting awaiting = new Pc_Awaiting(account.getMail(),account.getPassword());
-		awaiting.execute();
+		Pc_Wait_Payment wait_payment = new Pc_Wait_Payment(account.getMail(),account.getPassword());
+		wait_payment.execute();
 		System.out.println("【" + args[0] + "】アカウントの【支払い待ち】商品詳細画面表示処理完了！！！");
 	}
 
