@@ -31,6 +31,8 @@ public class Pc_Output extends Pc_Mercari {
 	//==================================================================================================================
 	/** メルカリユーザーID */
 	String userId;
+	/** メルカリユーザー名 */
+	String userName;
 	/** メルカリユーザーパスワード */
 	String userPass;
 	/** 出品一覧メッセージ */
@@ -81,7 +83,8 @@ public class Pc_Output extends Pc_Mercari {
 		try {
 			// 【出品した商品 - 取引中】画面
 			driver.get(PC_IN_PROGRESS_URL);
-
+			// アカウント名を設定する
+			this.setName();
 			for(int i = 0;i < 10000;i++){
 				// 【出品した商品 - 取引中】画面メッセージ
 				message = driver.findElement(By.id("mypage-tab-transaction-old")).getText();
@@ -134,6 +137,23 @@ public class Pc_Output extends Pc_Mercari {
 		}
 	}
 
+	/**
+	 * =================================================================================================================
+	 * 「アカウント名」を取得する
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void setName() {
+		String name = StringUtils.EMPTY;
+		try{
+			name = driver.findElement(By.xpath("//div[@class='pc-header-user-box pc-header-mypage-box']")).findElement(By.tagName("figcaption")).getText();
+		}catch(Exception e){
+		}
+		this.userName = name;
+	}
+	
 	/**
 	 * =================================================================================================================
 	 * 「商品詳細画面URL」を取得する
@@ -288,9 +308,9 @@ public class Pc_Output extends Pc_Mercari {
 	 */
 	public void click_button() {
 		try {
-			driver.findElements(By.xpath("//button[@class='btn-red']")).get(INT_0).click();
+			driver.findElements(By.xpath("//button[@class='btn-default btn-red']")).get(INT_0).click();
 		} catch (Exception e) {
-			System.out.println("【エラー】：【発送待ち】【評価待ち】商品の抽出処理が失敗しました。");
+			System.out.println("【エラー】：「商品の発送をしたので、発送通知をする」・「評価を投稿する」をクリック処理が失敗しました。");
 		}
 
 	}

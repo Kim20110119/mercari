@@ -172,6 +172,7 @@ public class AllOutput {
 				// 「F_Index」
 				Cell f_index = row_index.createCell(5);
 				f_index.setCellValue(bean.getDelivery());   // お届け先
+				index++;
 		    }
 	    }
 	    // ファイル入出力ストリーム

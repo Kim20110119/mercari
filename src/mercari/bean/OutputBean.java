@@ -24,6 +24,10 @@ public class OutputBean {
 	private String profit;
 	/** お届け先 */
 	private String delivery;
+	/** アカウント */
+	private String account;
+	/** メールアドレス */
+	private String mail;
 	/**
 	 * @return 商品ID
 	 */
@@ -96,4 +100,29 @@ public class OutputBean {
 	public void setDelivery(String delivery) {
 		this.delivery = delivery;
 	}
+	/**
+	 * @return アカウント
+	 */
+	public String getAccount() {
+		return account;
+	}
+	/**
+	 * @param アカウントをセットする
+	 */
+	public void setAccount(String account) {
+		this.account = account;
+	}
+	/**
+	 * @return メールアドレス
+	 */
+	public String getMail() {
+		return mail;
+	}
+	/**
+	 * @param メールアドレスをセットする
+	 */
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+	
 }
