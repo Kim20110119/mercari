@@ -95,7 +95,7 @@ public class AllOutput {
 	public void setFileName(){
 		String fileName = StringUtils.EMPTY;
 		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd'.xlsx'");
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(this.status + "yyyyMMdd'.xlsx'");
 			fileName = simpleDateFormat.format(new Date(System.currentTimeMillis()));
 		} catch (Exception e) {
 			System.out.println(this.status + "のファイル名作成失敗！！！" );
