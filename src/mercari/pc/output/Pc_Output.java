@@ -42,7 +42,7 @@ public class Pc_Output extends Pc_Mercari {
 	/** 「発送待ち」商品リスト */
 	List<OutputBean> list_1 = new ArrayList<OutputBean>();
 	/** 「評価待ち」商品リスト */
-	List<OutputBean> list_3 = new ArrayList<OutputBean>();;
+	List<OutputBean> list_3 = new ArrayList<OutputBean>();
 
 
 	//==================================================================================================================
@@ -108,6 +108,8 @@ public class Pc_Output extends Pc_Mercari {
 							list_3.add(this.getBean(j));
 							// 評価をクリックする
 							this.click_face();
+							// 1秒待ち
+							this.sleep(1000);
 							// 「評価を投稿する」クリックする
 							this.click_button();
 							// タブを閉じる

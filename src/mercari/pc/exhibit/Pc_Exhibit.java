@@ -234,8 +234,8 @@ public class Pc_Exhibit{
 			sleep(int_random(INT_5) * 1000);
 			//「出品する」ボタンをクリックする
 			this.click();
-			// 2秒待ち
-			sleep(2000);
+			// 3秒待ち
+			sleep(3000);
 			return Boolean.TRUE;
 		} catch (Exception e) {
 			System.out.println("【エラー】：" + this.name + "出品が失敗しました。");

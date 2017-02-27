@@ -2,11 +2,15 @@ package mercari.pc.awaiting;
 
 import static common.constant.MercariConstants.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 
 import mercari.bean.OutputBean;
+import mercari.excel.AllOutput;
 import mercari.pc.Pc_Mercari;
 
 /**
@@ -27,10 +31,14 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 	//==================================================================================================================
 	/** メルカリユーザーID */
 	String userId;
+	/** メルカリユーザー名 */
+	String userName;
 	/** メルカリユーザーパスワード */
 	String userPass;
 	/** 出品一覧メッセージ */
 	String message;
+	/** 「評価待ち」商品リスト */
+	List<OutputBean> list = new ArrayList<OutputBean>();
 
 	//==================================================================================================================
 	// JavaScript
@@ -70,9 +78,10 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 	 */
 	public Boolean execute() {
 		try {
+			// アカウント名を設定する
+			this.setName();
 			// 【出品した商品 - 取引中】画面
 			driver.get(PC_IN_PROGRESS_URL);
-
 			for(int i = 0;i < 10000;i++){
 				// 【出品した商品 - 取引中】画面メッセージ
 				message = driver.findElement(By.id("mypage-tab-transaction-old")).getText();
@@ -81,22 +90,57 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 				}else{
 					// 商品一覧数を取得する
 					int p_count = driver.findElement(By.id("mypage-tab-transaction-old")).findElements(By.tagName("li")).size();
-					// 【評価待ち】商品を検索し、新しいタブで商品詳細画面を開く
+					// 【評価待ち】取引中商品の評価をクリックし、EXCEL出力する
 					for(int j = 0; j < p_count; j++){
-						if(this.getStatus(j).equals(STR_WAIT_3)){
-							this.openTab(this.getDetailUrl(j));
+						String status = this.getStatus(j);
+						if(status.equals(STR_WAIT_3)){
+							// 「評価待ち」
+							list.add(this.getBean(j));
+							// 評価をクリックする
+							this.click_face();
+							// 1秒待ち
+							this.sleep(1000);
+							// 「評価を投稿する」クリックする
+							this.click_button();
+							// タブを閉じる
+							this.tab_close();
 						}
 					}
 					// 「次のページ」
 					this.pagerNext();
 				}
 			}
+			// 商品リストをEXCELで出力する
+			AllOutput output = new AllOutput();
+			// 評価待ち
+			if(list.size() > 0){
+				output.execute(userId, list, STR_WAIT_3);
+			}
 			return Boolean.TRUE;
 		} catch (Exception e) {
-			System.out.println("【エラー】：コメントある商品の抽出処理が失敗しました。");
+			System.out.println("【エラー】：【発送待ち】【評価待ち】商品の抽出処理が失敗しました。");
 			System.out.println(e.getMessage());
 			return Boolean.FALSE;
 		}
+	}
+
+	/**
+	 * =================================================================================================================
+	 * 「アカウント名」を取得する
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void setName() {
+		String name = StringUtils.EMPTY;
+		try{
+			// マイページ
+			driver.get(PC_MYPAGE_URL);
+			name = driver.findElement(By.xpath("//h2[@class='bold']")).getText();
+		}catch(Exception e){
+		}
+		this.userName = name;
 	}
 
 	/**
@@ -140,25 +184,11 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 
 	/**
 	 * =================================================================================================================
-	 * 「新しいタブ」を開く
-	 * =================================================================================================================
-	 *
-	 * @param String url 商品詳細URL
-	 *
-	 * @author kimC
-	 *
-	 */
-	public void openTab(String url) {
-        executor.executeScript("window.open('"+ url +"','_blank')");
-	}
-
-	/**
-	 * =================================================================================================================
-	 * 抽出した商品を商品Beanに設定する
+	 * 商品詳細画面から商品情報を取得する
 	 * =================================================================================================================
 	 *
 	 * @param int i インデクス
-	 * @return OutputBean bean 出力用商品Bean
+	 * @return OutputBean bean 商品情報Bean
 	 *
 	 * @author kimC
 	 *
@@ -170,6 +200,8 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 		driver.get(this.getUrlByTab());
 		// 出力商品Bean
 		OutputBean bean = new OutputBean();
+		// アカウント名
+		bean.setAccount(this.userName);
 		// 商品名
 		String name = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_0).getText();
 		if(StringUtils.isNotEmpty(name)){
@@ -204,6 +236,20 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 
 	/**
 	 * =================================================================================================================
+	 * 「新しいタブ」を開く
+	 * =================================================================================================================
+	 *
+	 * @param String url 商品詳細URL
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void openTab(String url) {
+        executor.executeScript("window.open('"+ url +"','_blank')");
+	}
+
+	/**
+	 * =================================================================================================================
 	 * タブを取得する
 	 * =================================================================================================================
 	 *
@@ -227,6 +273,60 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 
 	}
 
+	/**
+	 * =================================================================================================================
+	 * 評価をクリックする
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void click_face() {
+		try {
+			driver.findElement(By.xpath("//label[@for='face1']")).click();
+		} catch (Exception e) {
+		}
+
+	}
+
+	/**
+	 * =================================================================================================================
+	 * 「商品の発送をしたので、発送通知をする」・「評価を投稿する」をクリックする
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void click_button() {
+		try {
+			driver.findElements(By.xpath("//button[@class='btn-default btn-red']")).get(INT_0).click();
+		} catch (Exception e) {
+			System.out.println("【エラー】：「評価を投稿する」をクリック処理が失敗しました。");
+		}
+
+	}
+
+	/**
+	 * =================================================================================================================
+	 * タブを閉じる
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public  void tab_close() {
+		try {
+			for (String handle : driver.getWindowHandles()) {
+				if (!handle.equals(originalHandel)) {
+					driver.switchTo().window(handle);
+					driver.close();
+				}
+			}
+			driver.switchTo().window(originalHandel);
+		} catch (Exception e) {
+		}
+
+	}
 
 	/**
 	 * =================================================================================================================
@@ -296,5 +396,4 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 			System.out.println(e.getMessage());
 		}
 	}
-
 }
