@@ -81,10 +81,10 @@ public class Pc_Output extends Pc_Mercari {
 	 */
 	public Boolean execute() {
 		try {
-			// 【出品した商品 - 取引中】画面
-			driver.get(PC_IN_PROGRESS_URL);
 			// アカウント名を設定する
 			this.setName();
+			// 【出品した商品 - 取引中】画面
+			driver.get(PC_IN_PROGRESS_URL);
 			for(int i = 0;i < 10000;i++){
 				// 【出品した商品 - 取引中】画面メッセージ
 				message = driver.findElement(By.id("mypage-tab-transaction-old")).getText();
@@ -148,12 +148,14 @@ public class Pc_Output extends Pc_Mercari {
 	public void setName() {
 		String name = StringUtils.EMPTY;
 		try{
-			name = driver.findElement(By.xpath("//div[@class='pc-header-user-box pc-header-mypage-box']")).findElement(By.tagName("figcaption")).getText();
+			// マイページ
+			driver.get(PC_MYPAGE_URL);
+			name = driver.findElement(By.xpath("//h2[@class='bold']")).getText();
 		}catch(Exception e){
 		}
 		this.userName = name;
 	}
-	
+
 	/**
 	 * =================================================================================================================
 	 * 「商品詳細画面URL」を取得する
@@ -195,11 +197,11 @@ public class Pc_Output extends Pc_Mercari {
 
 	/**
 	 * =================================================================================================================
-	 * 取引中商品のスタータスを取得する
+	 * 商品詳細画面から商品情報を取得する
 	 * =================================================================================================================
 	 *
 	 * @param int i インデクス
-	 * @return String status 取引中商品のスタータス
+	 * @return OutputBean bean 商品情報Bean
 	 *
 	 * @author kimC
 	 *
@@ -211,6 +213,8 @@ public class Pc_Output extends Pc_Mercari {
 		driver.get(this.getUrlByTab());
 		// 出力商品Bean
 		OutputBean bean = new OutputBean();
+		// アカウント名
+		bean.setAccount(this.userName);
 		// 商品名
 		String name = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_0).getText();
 		if(StringUtils.isNotEmpty(name)){
