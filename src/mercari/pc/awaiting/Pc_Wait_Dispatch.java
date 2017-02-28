@@ -113,7 +113,7 @@ public class Pc_Wait_Dispatch extends Pc_Mercari {
 			}
 			return Boolean.TRUE;
 		} catch (Exception e) {
-			System.out.println("【エラー】：コメントある商品の抽出処理が失敗しました。");
+			System.out.println("【エラー】：【発送待ち】商品の抽出処理が失敗しました。");
 			System.out.println(e.getMessage());
 			return Boolean.FALSE;
 		}
@@ -134,6 +134,7 @@ public class Pc_Wait_Dispatch extends Pc_Mercari {
 			driver.get(PC_MYPAGE_URL);
 			name = driver.findElement(By.xpath("//h2[@class='bold']")).getText();
 		}catch(Exception e){
+			System.out.println("【エラー】：アカウント名を取得失敗。");
 		}
 		this.userName = name;
 	}
@@ -153,6 +154,7 @@ public class Pc_Wait_Dispatch extends Pc_Mercari {
 		try{
 			url = driver.findElement(By.id("mypage-tab-transaction-old")).findElements(By.tagName("li")).get(i).findElement(By.tagName("a")).getAttribute("href");
 		}catch(Exception e){
+			System.out.println("【エラー】：商品詳細画面URLを取得失敗。");
 		}
 		return url;
 	}
@@ -173,6 +175,7 @@ public class Pc_Wait_Dispatch extends Pc_Mercari {
 		try{
 			status = driver.findElement(By.id("mypage-tab-transaction-old")).findElements(By.tagName("li")).get(i).findElement(By.className("mypage-item-status")).getText();
 		}catch(Exception e){
+			System.out.println("【エラー】：取引中商品のスタータスを取得失敗。");
 		}
 		return status;
 	}
@@ -280,13 +283,14 @@ public class Pc_Wait_Dispatch extends Pc_Mercari {
 		try {
 			driver.findElement(By.xpath("//label[@for='face1']")).click();
 		} catch (Exception e) {
+			System.out.println("【エラー】：評価をクリック失敗。");
 		}
 
 	}
 
 	/**
 	 * =================================================================================================================
-	 * 「商品の発送をしたので、発送通知をする」・「評価を投稿する」をクリックする
+	 * 「商品の発送をしたので、発送通知をする」をクリックする
 	 * =================================================================================================================
 	 *
 	 * @author kimC
@@ -296,7 +300,7 @@ public class Pc_Wait_Dispatch extends Pc_Mercari {
 		try {
 			driver.findElements(By.xpath("//button[@class='btn-default btn-red']")).get(INT_0).click();
 		} catch (Exception e) {
-			System.out.println("【エラー】：「商品の発送をしたので、発送通知をする」・「評価を投稿する」をクリック処理が失敗しました。");
+			System.out.println("【エラー】：「商品の発送をしたので、発送通知をする」をクリック処理が失敗しました。");
 		}
 
 	}

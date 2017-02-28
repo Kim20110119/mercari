@@ -103,11 +103,6 @@ public class CreateFolder {
 			if(!excel_file.exists()){
 				excel_file.mkdir();
 			}
-			// IMAGES出力フォルダを作成する
-			File image_file = new File("images/" + account);
-			if(!image_file.exists()){
-				image_file.mkdir();
-			}
 		}catch (Exception e) {
 			System.out.println("【エラー】：フォルダ作成失敗！");
 		}

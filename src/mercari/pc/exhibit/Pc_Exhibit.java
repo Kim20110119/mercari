@@ -293,7 +293,7 @@ public class Pc_Exhibit{
 	 */
 	public void setImage() {
 		// ファイル名の一覧を取得する
-        File file = new File("images/" + this.userId + "/" + this.images_path);
+        File file = new File("images/" + this.images_path);
         File files[] = file.listFiles();
         // 取得した一覧を表示する
         for (int i=0; i<files.length; i++) {
