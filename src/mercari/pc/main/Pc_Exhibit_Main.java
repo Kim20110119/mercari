@@ -31,7 +31,7 @@ public class Pc_Exhibit_Main {
 			exhibit.execute(bean);
 		}
 		exhibit.driverQuit();
-		System.out.println("【" + args[0] + "】アカウントの出品完了！！！");
+		System.out.println("【" + account.getMail() + "】アカウントの出品完了！！！");
 	}
 
 }

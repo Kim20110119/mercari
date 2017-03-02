@@ -20,7 +20,7 @@ public class Pc_Comment_Main {
 		// 【コメント】商品詳細画面表示処理
 		Pc_Comment comment = new Pc_Comment(account.getMail(),account.getPassword());
 		comment.execute();
-		System.out.println("【" + args[0] + "】アカウントの【コメント】商品詳細画面表示処理完了！！！");
+		System.out.println("【" + account.getMail() + "】アカウントの【コメント】商品詳細画面表示処理完了！！！");
 	}
 
 }

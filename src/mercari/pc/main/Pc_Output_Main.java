@@ -23,7 +23,7 @@ public class Pc_Output_Main {
 		output.execute();
 		// ブラウザドライバーを終了する
 		output.driverQuit();
-		System.out.println("【" + args[0] + "】アカウントの【発送待ち】【評価待ち】商品の抽出処理完了！！！");
+		System.out.println("【" + account.getMail() + "】アカウントの【発送待ち】【評価待ち】商品の抽出処理完了！！！");
 	}
 
 }

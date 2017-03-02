@@ -23,6 +23,6 @@ public class Pc_Wait_Evaluation_Main {
 		output.execute();
 		// ブラウザドライバーを終了する
 		output.driverQuit();
-		System.out.println("【" + args[0] + "】アカウントの【評価待ち】商品の抽出処理完了！！！");
+		System.out.println("【" + account.getMail() + "】アカウントの【評価待ち】商品の抽出処理完了！！！");
 	}
 }

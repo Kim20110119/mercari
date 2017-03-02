@@ -21,7 +21,7 @@ public class Pc_Wait_Dispatch_Main {
 		Pc_Wait_Dispatch output = new Pc_Wait_Dispatch(account.getMail(),account.getPassword());
 		// 【発送待ち】商品出力
 		output.execute();
-		System.out.println("【" + args[0] + "】アカウントの【発送待ち】商品の抽出処理完了！！！");
+		System.out.println("【" + account.getMail() + "】アカウントの【発送待ち】商品の抽出処理完了！！！");
 	}
 
 }

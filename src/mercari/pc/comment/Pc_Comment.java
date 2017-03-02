@@ -190,8 +190,18 @@ public class Pc_Comment extends Pc_Mercari {
 		try{
 			driver.findElement(By.className("pager-next")).click();
 		}catch (Exception e){
-			this.scroll(0, 100);
-			driver.findElement(By.className("pager-next")).click();
+			try{
+				for(int i = 0; i < 10; i++){
+					this.scroll(0, 100 * (i + 1));
+					try{
+						driver.findElement(By.className("pager-next")).click();
+						break;
+					}catch(Exception ex){
+					}
+				}
+			}catch(Exception end_e){
+				System.out.println("【エラー】：次ページ遷移する処理が失敗しました。");
+			}
 		}
 	}
 

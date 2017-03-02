@@ -20,7 +20,7 @@ public class Pc_Wait_Payment_Main {
 		// 【支払い待ち】商品詳細表示処理
 		Pc_Wait_Payment wait_payment = new Pc_Wait_Payment(account.getMail(),account.getPassword());
 		wait_payment.execute();
-		System.out.println("【" + args[0] + "】アカウントの【支払い待ち】商品詳細画面表示処理完了！！！");
+		System.out.println("【" + account.getMail() + "】アカウントの【支払い待ち】商品詳細画面表示処理完了！！！");
 	}
 
 }

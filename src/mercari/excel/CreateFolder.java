@@ -122,7 +122,7 @@ public class CreateFolder {
 			File product_file = new File("excel/" + account + "/商品.xlsx");
 			if(!product_file.exists()){
 				// アカウントEXCELコピーする
-				Path product_input = FileSystems.getDefault().getPath("excel/sample/商品.xlsx");
+				Path product_input = FileSystems.getDefault().getPath("lib/商品.xlsx");
 				Path product_output = FileSystems.getDefault().getPath("excel/" + account + "/商品.xlsx");
 				Files.copy(product_input, product_output);
 			}

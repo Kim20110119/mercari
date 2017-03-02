@@ -288,8 +288,8 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 		try {
 			driver.findElement(By.xpath("//label[@for='face1']")).click();
 		} catch (Exception e) {
+			System.out.println("【エラー】：評価アイコンをクリック処理が失敗しました。");
 		}
-
 	}
 
 	/**
@@ -327,6 +327,7 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 			}
 			driver.switchTo().window(originalHandel);
 		} catch (Exception e) {
+			System.out.println("【エラー】：タブを閉じる処理が失敗しました。");
 		}
 
 	}
@@ -343,7 +344,11 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 	 *
 	 */
 	public void scroll(int x, int y) {
-		executor.executeScript("scroll(" + x + ", " + y + ");");
+		try {
+			executor.executeScript("scroll(" + x + ", " + y + ");");
+		} catch (Exception e) {
+			System.out.println("【エラー】：スクロール処理が失敗しました。");
+		}
 	}
 
 	/**
@@ -370,8 +375,18 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 		try{
 			driver.findElement(By.className("pager-next")).click();
 		}catch (Exception e){
-			this.scroll(0, 100);
-			driver.findElement(By.className("pager-next")).click();
+			try{
+				for(int i = 0; i < 10; i++){
+					this.scroll(0, 100 * (i + 1));
+					try{
+						driver.findElement(By.className("pager-next")).click();
+						break;
+					}catch(Exception ex){
+					}
+				}
+			}catch(Exception end_e){
+				System.out.println("【エラー】：次ページ遷移する処理が失敗しました。");
+			}
 		}
 	}
 
