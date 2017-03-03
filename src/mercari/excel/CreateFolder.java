@@ -173,13 +173,23 @@ public class CreateFolder {
 				pw.println("@pause");
 				pw.close();
 			}
-			// 【発送待ち】【評価待ち】バッチファイルを作成
-			File output_file = new File("excel/" + account + "/商品出力.bat");
-			if(!output_file.exists()){
-				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(output_file)));
+			// 【発送待ち】バッチファイルを作成
+			File wait_dispatch_file = new File("excel/" + account + "/発送待ち.bat");
+			if(!wait_dispatch_file.exists()){
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(wait_dispatch_file)));
 				pw.println("cd ..");
 				pw.println("cd ..");
-				pw.println("java -jar output.jar " + account);
+				pw.println("java -jar wait_dispatch.jar " + account);
+				pw.println("@pause");
+				pw.close();
+			}
+			// 【評価待ち】バッチファイルを作成
+			File wait_evaluation_file = new File("excel/" + account + "/評価待ち.bat");
+			if(!wait_evaluation_file.exists()){
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(wait_evaluation_file)));
+				pw.println("cd ..");
+				pw.println("cd ..");
+				pw.println("java -jar wait_evaluation.jar " + account);
 				pw.println("@pause");
 				pw.close();
 			}
