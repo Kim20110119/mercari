@@ -18,7 +18,7 @@ public class Pc_Wait_Dispatch_Main {
 		// アカウント情報を取得する
 		AccountBean account = product.getAccount(args[0]);
 		// 【発送待ち】商品の抽出処理
-		Pc_Wait_Dispatch output = new Pc_Wait_Dispatch(account.getMail(),account.getPassword());
+		Pc_Wait_Dispatch output = new Pc_Wait_Dispatch(account);
 		// 【発送待ち】商品出力
 		output.execute();
 		System.out.println("【" + account.getMail() + "】アカウントの【発送待ち】商品の抽出処理完了！！！");

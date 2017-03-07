@@ -18,7 +18,7 @@ public class Pc_Comment_Main {
 		// アカウント情報を取得する
 		AccountBean account = product.getAccount(args[0]);
 		// 【コメント】商品詳細画面表示処理
-		Pc_Comment comment = new Pc_Comment(account.getMail(),account.getPassword());
+		Pc_Comment comment = new Pc_Comment(account);
 		comment.execute();
 		System.out.println("【" + account.getMail() + "】アカウントの【コメント】商品詳細画面表示処理完了！！！");
 	}

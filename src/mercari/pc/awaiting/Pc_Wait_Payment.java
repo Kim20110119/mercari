@@ -5,8 +5,11 @@ import static common.constant.MercariConstants.*;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
-import mercari.pc.Pc_Mercari;
+import mercari.bean.AccountBean;
 
 /**
  * =====================================================================================================================
@@ -16,7 +19,7 @@ import mercari.pc.Pc_Mercari;
  * @author kimC
  *
  */
-public class Pc_Wait_Payment extends Pc_Mercari {
+public class Pc_Wait_Payment{
 	//==================================================================================================================
 	// 定数
 	//==================================================================================================================
@@ -24,6 +27,8 @@ public class Pc_Wait_Payment extends Pc_Mercari {
 	//==================================================================================================================
 	// メルカリアカウント
 	//==================================================================================================================
+	/** WEBドライバー */
+	WebDriver driver;
 	/** メルカリユーザーID */
 	String userId;
 	/** メルカリユーザーパスワード */
@@ -40,18 +45,69 @@ public class Pc_Wait_Payment extends Pc_Mercari {
 	/**
 	 * コンストラクタ
 	 *
-	 * @param String id メルカリカウントID
-	 * @param String pass メルカリカウントパスワード
+	 * @param AccountBean account メルカリカウント情報
 	 *
 	 * @author kimC
 	 *
 	 */
-	public Pc_Wait_Payment(String id, String pass) {
+	public Pc_Wait_Payment(AccountBean account) {
 		// ユーザーID
-		this.userId = id;
+		this.userId = account.getMail();
 		// ユーザーパスワード
-		this.userPass = pass;
-		super.login(this.userId, this.userPass);
+		this.userPass = account.getPassword();
+		// Chromeドライバーをプロパティへ設定
+		System.setProperty("webdriver.chrome.driver", "lib/chromedriver.exe");
+		if(StringUtils.isNotEmpty(account.getUserAgent())){
+			// ユーザーエージェントを上書きして、起動する
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--user-agent=" + account.getUserAgent() );
+			driver = new ChromeDriver(options);
+		}else{
+			driver = new ChromeDriver();
+		}
+		// ログイン処理
+		this.login();
+	}
+
+	/**
+	 * =================================================================================================================
+	 * メルカリログイン処理
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void login(){
+		try{
+			// ログイン画面
+			driver.get(PC_LOGIN_URL);
+			// ログインメールアドレス
+			driver.findElement(By.name("email")).sendKeys(this.userId);
+			// ログインパスワード
+			driver.findElement(By.name("password")).sendKeys(this.userPass);
+			// ロボットチェック
+			driver.findElement(By.className("g-recaptcha")).click();
+			Boolean loginFlag = Boolean.TRUE;
+			// 1時間後に手動でログインしてない場合、自動でログインするようにする(※　認証してないとログインエラー表示)
+			for(int i = 0; i < 3600; i++){
+				// 現在のURLを取得する
+				String url = driver.getCurrentUrl();
+				// ログイン後URLかを判断する
+				if(url.equals("https://www.mercari.com/jp/")){
+					loginFlag = Boolean.FALSE;
+					break;
+				}
+				// 10秒待ち
+				sleep(1000);
+			}
+			if(loginFlag){
+				// ログインボタン
+				driver.findElement(By.className("login-submit")).click();
+			}
+		}catch (Exception e){
+			System.out.println("【エラー】：ログイン失敗しました。");
+			driver.quit();
+		}
 	}
 
 	/**

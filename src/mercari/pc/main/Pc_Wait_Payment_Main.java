@@ -18,7 +18,7 @@ public class Pc_Wait_Payment_Main {
 		// アカウント情報を取得する
 		AccountBean account = product.getAccount(args[0]);
 		// 【支払い待ち】商品詳細表示処理
-		Pc_Wait_Payment wait_payment = new Pc_Wait_Payment(account.getMail(),account.getPassword());
+		Pc_Wait_Payment wait_payment = new Pc_Wait_Payment(account);
 		wait_payment.execute();
 		System.out.println("【" + account.getMail() + "】アカウントの【支払い待ち】商品詳細画面表示処理完了！！！");
 	}
