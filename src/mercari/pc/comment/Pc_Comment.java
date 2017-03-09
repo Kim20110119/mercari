@@ -40,7 +40,7 @@ public class Pc_Comment{
 	// JavaScript
 	//==================================================================================================================
 	/** JavaScript */
-	JavascriptExecutor executor = (JavascriptExecutor)driver;
+	JavascriptExecutor executor;
 
 	/**
 	 * コンストラクタ
@@ -65,6 +65,7 @@ public class Pc_Comment{
 		}else{
 			driver = new ChromeDriver();
 		}
+		executor = (JavascriptExecutor)driver;
 		// ログイン処理
 		this.login();
 	}

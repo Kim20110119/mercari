@@ -180,7 +180,6 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 		try{
 			status = driver.findElement(By.id("mypage-tab-transaction-old")).findElements(By.tagName("li")).get(i).findElement(By.className("mypage-item-status")).getText();
 		}catch(Exception e){
-			System.out.println("【エラー】：取引中商品のスタータスを取得失敗。");
 		}
 		return status;
 	}
@@ -206,7 +205,7 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 		// アカウント名
 		bean.setAccount(this.userName);
 		// 商品名
-		String name = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_0).getText();
+		String name = this.getValue(INT_0);
 		if(StringUtils.isNotEmpty(name)){
 			// 商品名
 			bean.setName(name.split("\n")[0]);
@@ -214,27 +213,47 @@ public class Pc_Wait_Evaluation extends Pc_Mercari {
 			bean.setPrice(name.split("\n")[1]);
 		}
 		// 販売手数料
-		String commission = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_2).getText();
+		String commission = this.getValue(INT_2);
 		if(StringUtils.isNotEmpty(commission)){
 			bean.setCommission(commission);
 		}
 		// 販売利益
-		String profit = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_3).getText();
+		String profit = this.getValue(INT_3);
 		if(StringUtils.isNotEmpty(profit)){
 			bean.setProfit(profit);
 		}
 		// 商品ID
-		String id = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_5).getText();
+		String id = this.getValue(INT_5);
 		if(StringUtils.isNotEmpty(id)){
 			bean.setId(id);
 		}
 		// お届け先
-		String delivery = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(INT_6).getText();
+		String delivery = this.getValue(INT_6);
 		delivery = delivery.replaceAll("\n", "　");
 		if(StringUtils.isNotEmpty(delivery)){
 			bean.setDelivery(delivery);
 		}
 		return bean;
+	}
+
+	/**
+	 * =================================================================================================================
+	 * 商品詳細画面から商品情報を取得する
+	 * =================================================================================================================
+	 *
+	 * @param int i インデクス
+	 * @return String value 商品情報
+	 *
+	 * @author kimC
+	 *
+	 */
+	public String getValue(int i) {
+		String value = StringUtils.EMPTY;
+		try{
+			value = driver.findElements(By.xpath("//ul[@class='transact-info-table-cell']")).get(i).getText();
+		}catch (Exception e) {
+		}
+		return value;
 	}
 
 	/**

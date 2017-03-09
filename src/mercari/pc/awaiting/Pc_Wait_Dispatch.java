@@ -49,7 +49,7 @@ public class Pc_Wait_Dispatch{
 	// JavaScript
 	//==================================================================================================================
 	/** JavaScript */
-	JavascriptExecutor executor = (JavascriptExecutor)driver;
+	JavascriptExecutor executor;
 	/** WindowsID */
 	String originalHandel;
 	/** WindowsIDリスト */
@@ -78,6 +78,7 @@ public class Pc_Wait_Dispatch{
 		}else{
 			driver = new ChromeDriver();
 		}
+		executor = (JavascriptExecutor)driver;
 		// ログイン処理
 		this.login();
 		// オリジナルWindowsIDを取得
