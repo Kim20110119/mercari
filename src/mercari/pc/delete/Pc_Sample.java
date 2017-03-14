@@ -13,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import mercari.bean.AccountBean;
 import mercari.bean.OutputBean;
 
 /**
@@ -62,17 +63,19 @@ public class Pc_Sample{
 	 * @author kimC
 	 *
 	 */
-	public Pc_Sample() {
+	public Pc_Sample(AccountBean account) {
 		// Chromeドライバーをプロパティへ設定
 		System.setProperty("webdriver.chrome.driver", "lib/chromedriver.exe");
 		// ユーザーエージェントを上書きして、起動する
 		ChromeOptions options = new ChromeOptions();
 		File paths = new File("lib/8.4.4_0.crx");
 		options.addExtensions(paths);
+		options.addArguments("user-data-dir=" + account.getWifiPassword());
 		driver = new ChromeDriver(options);
-		driver = new ChromeDriver();
 		executor = (JavascriptExecutor)driver;
-		this.sleep(10000);
+		this.userId = account.getMail();
+		this.userPass = account.getPassword();
+		this.sleep(3000);
 		// オリジナルWindowsIDを取得
 		originalHandel = driver.getWindowHandle();
 		handelList.add(originalHandel);
