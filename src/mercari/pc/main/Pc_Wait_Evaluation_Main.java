@@ -18,7 +18,7 @@ public class Pc_Wait_Evaluation_Main {
 		// アカウント情報を取得する
 		AccountBean account = product.getAccount(args[0]);
 		// 【評価待ち】商品の抽出処理
-		Pc_Wait_Evaluation output = new Pc_Wait_Evaluation(account.getMail(),account.getPassword());
+		Pc_Wait_Evaluation output = new Pc_Wait_Evaluation(account);
 		// 【評価待ち】商品出力
 		output.execute();
 		// ブラウザドライバーを終了する

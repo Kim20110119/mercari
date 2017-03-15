@@ -2,6 +2,8 @@ package mercari.pc.awaiting;
 
 import static common.constant.MercariConstants.*;
 
+import java.io.File;
+
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -57,14 +59,19 @@ public class Pc_Wait_Payment{
 		this.userPass = account.getPassword();
 		// Chromeドライバーをプロパティへ設定
 		System.setProperty("webdriver.chrome.driver", "lib/chromedriver.exe");
+		// Chromeドライバーオプション
+		ChromeOptions options = new ChromeOptions();
+		// ユーザーエージェントを設定する
 		if(StringUtils.isNotEmpty(account.getUserAgent())){
-			// ユーザーエージェントを上書きして、起動する
-			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--user-agent=" + account.getUserAgent() );
-			driver = new ChromeDriver(options);
-		}else{
-			driver = new ChromeDriver();
 		}
+		// ユーザーデータパスを設定する
+		if(StringUtils.isNotEmpty(account.getUserPath())){
+			File paths = new File("lib/8.4.4_0.crx");
+			options.addExtensions(paths);
+			options.addArguments("user-data-dir=" + account.getUserPath());
+		}
+		driver = new ChromeDriver(options);
 		executor = (JavascriptExecutor)driver;
 		// ログイン処理
 		this.login();

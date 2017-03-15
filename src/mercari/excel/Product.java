@@ -142,16 +142,19 @@ public class Product {
 			// ユーザーエージェント
 			Cell cell_3 = row.getCell(3);
 			bean.setUserAgent(this.getCellValue(cell_3));
-			// Wifi
+			// ユーザーデータパス
 			Cell cell_4 = row.getCell(4);
+			bean.setUserPath(this.getCellValue(cell_4));
+			// Wifi
+			Cell cell_5 = row.getCell(5);
 			Boolean wifiFlag = Boolean.FALSE;
-			if("1".equals(this.getCellValue(cell_4))){
+			if("1".equals(this.getCellValue(cell_5))){
 				wifiFlag = Boolean.TRUE;
 			}
 			bean.setWifi(wifiFlag);
 			// Wifiパスワード
-			Cell cell_5 = row.getCell(5);
-			bean.setWifiPassword(this.getCellValue(cell_5));
+			Cell cell_6 = row.getCell(6);
+			bean.setWifiPassword(this.getCellValue(cell_6));
 
 			workbook.close();
 			filein.close();

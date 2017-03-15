@@ -24,6 +24,8 @@ public class AccountBean {
 	private String wifiPassword;
 	/** ユーザーエージェント */
 	private String userAgent;
+	/** ユーザー情報パス */
+	private String userPath;
 	/**
 	 * @return アカウント
 	 */
@@ -95,6 +97,18 @@ public class AccountBean {
 	 */
 	public void setUserAgent(String userAgent) {
 		this.userAgent = userAgent;
+	}
+	/**
+	 * @return ユーザーデータパス
+	 */
+	public String getUserPath() {
+		return userPath;
+	}
+	/**
+	 * @param ユーザーデータパスをセットする
+	 */
+	public void setUserPath(String userPath) {
+		this.userPath = userPath;
 	}
 
 }
