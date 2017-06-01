@@ -205,7 +205,12 @@ public class Pc_Exhibit{
 				if(StringUtils.isNotEmpty(this.size)){
 					this.selectByText(INT_3,this.size);
 				}else{
-					this.selectByText(INT_3,DEFAULT_SIZE);
+					try{
+						this.selectByText(INT_3,DEFAULT_SIZE);
+					}catch (Exception s_e){
+						this.selectByIndex(INT_3,1);
+					}
+
 				}
 				// 商品状態
 				this.selectByText(INT_4,this.state);
@@ -228,8 +233,13 @@ public class Pc_Exhibit{
 				System.out.println("【エラー】：" + this.name + "出品が失敗しました。");
 				return Boolean.FALSE;
 			}
-			// 価格
-			this.sendKeysByInput(INT_2,this.price);
+			try{
+				// 価格
+				this.sendKeysByInput(INT_2,this.price);
+			}catch (Exception i_e){
+				// 価格
+				this.sendKeysByInput(INT_1,this.price);
+			}
 			// 0～5秒待ち（ランダム）
 			sleep(int_random(INT_5) * 1000);
 			//「出品する」ボタンをクリックする
@@ -349,6 +359,19 @@ public class Pc_Exhibit{
 	public void selectByText(Integer index, String text) {
 		Select select = new Select(driver.findElements(By.xpath("//select[@class='select-default']")).get(index));
 		select.selectByVisibleText(text);
+	}
+
+	/**
+	 * =================================================================================================================
+	 * セレクトブルダウン
+	 * =================================================================================================================
+	 *
+	 * @author kimC
+	 *
+	 */
+	public void selectByIndex(Integer index, Integer index_s) {
+		Select select = new Select(driver.findElements(By.xpath("//select[@class='select-default']")).get(index));
+		select.selectByIndex(index_s);
 	}
 
 	/**
